@@ -45,12 +45,15 @@ jobs:
           GOOS=${GOOSARCH%/*}
           GOARCH=${GOOSARCH#*/}
           BINARY_NAME=${{github.repository}}-$GOOS-$GOARCH
+          if [ "$GOOS" == "windows" ]; then
+            BINARY_NAME="$BINARY_NAME.exe"
+          fi
           echo "BINARY_NAME=$BINARY_NAME" >> $GITHUB_ENV
           echo "GOOS=$GOOS" >> $GITHUB_ENV
           echo "GOARCH=$GOARCH" >> $GITHUB_ENV
       - name: Build
         run: |
-          go build -o "$BINARY_NAME" -v
+          go build -ldflags "-s -w" -o "$BINARY_NAME" -v
       - name: Verify binary exists
         run: |
           if [ ! -f "$BINARY_NAME" ]; then
