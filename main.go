@@ -7,11 +7,12 @@ import (
 	"time"
 )
 
+const outputSheetName = "Sheet1"
+
 var (
-	input           = flag.String("input", "input.xlsx", "input file")
-	inputSheetName  = flag.String("inputSheet", "Sheet1", "input sheet name")
-	output          = flag.String("output", "output.xlsx", "output file")
-	outputSheetName = flag.String("outputSheet", "Sheet1", "output sheet name")
+	input          = flag.String("input", "input.xlsx", "input file")
+	inputSheetName = flag.String("inputSheet", "Sheet1", "input sheet name")
+	output         = flag.String("output", "output.xlsx", "output file")
 )
 
 type Row struct {
@@ -31,35 +32,35 @@ type Row struct {
 }
 
 func createHeader(outputFile *excelize.File) {
-	outputFile.SetCellStr(*outputSheetName, "A1", "Date")
-	outputFile.SetCellStr(*outputSheetName, "B1", "Category")
-	outputFile.SetCellStr(*outputSheetName, "C1", "User")
-	outputFile.SetCellStr(*outputSheetName, "D1", "Task")
-	outputFile.SetCellStr(*outputSheetName, "E1", "Time")
-	outputFile.SetCellStr(*outputSheetName, "F1", "Region")
-	outputFile.SetCellStr(*outputSheetName, "G1", "Country")
-	outputFile.SetCellStr(*outputSheetName, "H1", "Department")
-	outputFile.SetCellStr(*outputSheetName, "I1", "Organizational Hierarchy")
-	outputFile.SetCellStr(*outputSheetName, "J1", "Functional Area")
-	outputFile.SetCellStr(*outputSheetName, "K1", "Service catalog")
-	outputFile.SetCellStr(*outputSheetName, "L1", "Service offering")
+	outputFile.SetCellStr(outputSheetName, "A1", "Date")
+	outputFile.SetCellStr(outputSheetName, "B1", "Category")
+	outputFile.SetCellStr(outputSheetName, "C1", "User")
+	outputFile.SetCellStr(outputSheetName, "D1", "Task")
+	outputFile.SetCellStr(outputSheetName, "E1", "Time")
+	outputFile.SetCellStr(outputSheetName, "F1", "Region")
+	outputFile.SetCellStr(outputSheetName, "G1", "Country")
+	outputFile.SetCellStr(outputSheetName, "H1", "Department")
+	outputFile.SetCellStr(outputSheetName, "I1", "Organizational Hierarchy")
+	outputFile.SetCellStr(outputSheetName, "J1", "Functional Area")
+	outputFile.SetCellStr(outputSheetName, "K1", "Service catalog")
+	outputFile.SetCellStr(outputSheetName, "L1", "Service offering")
 }
 
 func writeRows(outputFile *excelize.File, rows []Row, rowIndex *int) {
 	*rowIndex = *rowIndex + 1
 	for _, row := range rows {
-		outputFile.SetCellStr(*outputSheetName, fmt.Sprintf("A%d", *rowIndex), row.Date)
-		outputFile.SetCellStr(*outputSheetName, fmt.Sprintf("B%d", *rowIndex), row.Category)
-		outputFile.SetCellStr(*outputSheetName, fmt.Sprintf("C%d", *rowIndex), row.User)
-		outputFile.SetCellStr(*outputSheetName, fmt.Sprintf("D%d", *rowIndex), row.Task)
-		outputFile.SetCellStr(*outputSheetName, fmt.Sprintf("E%d", *rowIndex), row.Time)
-		outputFile.SetCellStr(*outputSheetName, fmt.Sprintf("F%d", *rowIndex), row.Region)
-		outputFile.SetCellStr(*outputSheetName, fmt.Sprintf("G%d", *rowIndex), row.Country)
-		outputFile.SetCellStr(*outputSheetName, fmt.Sprintf("H%d", *rowIndex), row.Department)
-		outputFile.SetCellStr(*outputSheetName, fmt.Sprintf("I%d", *rowIndex), row.OrganizationalHierarchy)
-		outputFile.SetCellStr(*outputSheetName, fmt.Sprintf("J%d", *rowIndex), row.FunctionalArea)
-		outputFile.SetCellStr(*outputSheetName, fmt.Sprintf("K%d", *rowIndex), row.ServiceCatalog)
-		outputFile.SetCellStr(*outputSheetName, fmt.Sprintf("L%d", *rowIndex), row.ServiceOffering)
+		outputFile.SetCellStr(outputSheetName, fmt.Sprintf("A%d", *rowIndex), row.Date)
+		outputFile.SetCellStr(outputSheetName, fmt.Sprintf("B%d", *rowIndex), row.Category)
+		outputFile.SetCellStr(outputSheetName, fmt.Sprintf("C%d", *rowIndex), row.User)
+		outputFile.SetCellStr(outputSheetName, fmt.Sprintf("D%d", *rowIndex), row.Task)
+		outputFile.SetCellStr(outputSheetName, fmt.Sprintf("E%d", *rowIndex), row.Time)
+		outputFile.SetCellStr(outputSheetName, fmt.Sprintf("F%d", *rowIndex), row.Region)
+		outputFile.SetCellStr(outputSheetName, fmt.Sprintf("G%d", *rowIndex), row.Country)
+		outputFile.SetCellStr(outputSheetName, fmt.Sprintf("H%d", *rowIndex), row.Department)
+		outputFile.SetCellStr(outputSheetName, fmt.Sprintf("I%d", *rowIndex), row.OrganizationalHierarchy)
+		outputFile.SetCellStr(outputSheetName, fmt.Sprintf("J%d", *rowIndex), row.FunctionalArea)
+		outputFile.SetCellStr(outputSheetName, fmt.Sprintf("K%d", *rowIndex), row.ServiceCatalog)
+		outputFile.SetCellStr(outputSheetName, fmt.Sprintf("L%d", *rowIndex), row.ServiceOffering)
 
 		*rowIndex = *rowIndex + 1
 	}
