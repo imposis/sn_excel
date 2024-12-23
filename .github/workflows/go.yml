@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
-          go-version: '1.16.3'
+          go-version: '1.23.2'
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2.5.2
         with:
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
-          go-version: '1.16.3'
+          go-version: '1.23.2'
       - run: go test -v -cover
   release:
     name: Create Release
@@ -39,11 +39,10 @@ jobs:
     needs: test
     strategy:
       matrix:
-        # List of GOOS and GOARCH pairs from `go tool dist list`
         goosarch:
-          - 'windows/amd64'
           - 'linux/amd64'
-          # etc
+          - 'darwin/arm64'
+          - 'windows/amd64'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -52,6 +51,17 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: '1.23.2'
+      - name: Cache Go modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Install dependencies
+        run: go mod download
       - name: Get OS and arch info
         run: |
           GOOSARCH=${{matrix.goosarch}}
@@ -64,8 +74,14 @@ jobs:
       - name: Build
         run: |
           go build -o "$BINARY_NAME" -v
+      - name: Verify binary exists
+        run: |
+          if [ ! -f "$BINARY_NAME" ]; then
+            echo "Binary $BINARY_NAME not found!"
+            exit 1
+          fi
       - name: Release Notes
-        run:
+        run: |
           git log $(git describe HEAD~ --tags --abbrev=0)..HEAD --pretty='format:* %h %s%n  * %an <%ae>' --no-merges >> ".github/RELEASE-TEMPLATE.md"
       - name: Release with Notes
         uses: softprops/action-gh-release@v1
@@ -75,3 +91,4 @@ jobs:
           files: ${{env.BINARY_NAME}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
