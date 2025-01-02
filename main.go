@@ -8,6 +8,7 @@ import (
 )
 
 const outputSheetName = "Sheet1"
+const dateFormat = "2006-01-02"
 
 var (
 	input          = flag.String("input", "input.xlsx", "input file")
@@ -67,14 +68,14 @@ func writeRows(outputFile *excelize.File, rows []Row, rowIndex *int) {
 }
 
 func createRow(row []string, dateInc int, timeSpent string) Row {
-	date, err := time.Parse("01-02-06", row[0])
+	date, err := time.Parse(dateFormat, row[0])
 	if err != nil {
 		fmt.Println(err, row[0])
 		return Row{}
 	}
 
 	return Row{
-		Date:                    date.AddDate(0, 0, dateInc).Format("2006-01-02"),
+		Date:                    date.AddDate(0, 0, dateInc).Format(dateFormat),
 		Category:                row[1],
 		User:                    row[2],
 		Task:                    row[3],
